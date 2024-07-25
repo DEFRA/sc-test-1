@@ -1,4 +1,4 @@
-# CDP Node.js Frontend Template
+# sc-test-1
 
 Core delivery platform Node.js Frontend Template.
 
@@ -30,7 +30,7 @@ easier to use the Node Version Manager [nvm](https://github.com/creationix/nvm)
 To use the correct version of Node.js for this application, via nvm:
 
 ```bash
-cd cdp-node-frontend-template
+cd sc-test-1
 nvm use
 ```
 
@@ -104,13 +104,13 @@ git config --global core.autocrlf false
 Build:
 
 ```bash
-docker build --target development --no-cache --tag cdp-node-frontend-template:development .
+docker build --target development --no-cache --tag sc-test-1:development .
 ```
 
 Run:
 
 ```bash
-docker run -p 3000:3000 cdp-node-frontend-template:development
+docker run -p 3000:3000 sc-test-1:development
 ```
 
 ### Production image
@@ -118,13 +118,13 @@ docker run -p 3000:3000 cdp-node-frontend-template:development
 Build:
 
 ```bash
-docker build --no-cache --tag cdp-node-frontend-template .
+docker build --no-cache --tag sc-test-1 .
 ```
 
 Run:
 
 ```bash
-docker run -p 3000:3000 cdp-node-frontend-template
+docker run -p 3000:3000 sc-test-1
 ```
 
 ### Docker Compose
