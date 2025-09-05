@@ -60,7 +60,7 @@ describe('context and cache', () => {
               href: '/about'
             }
           ],
-          serviceName: 'cdp-node-frontend-template',
+          serviceName: 'sc-test-1',
           serviceUrl: '/'
         })
       })
@@ -149,7 +149,7 @@ describe('context and cache', () => {
               href: '/about'
             }
           ],
-          serviceName: 'cdp-node-frontend-template',
+          serviceName: 'sc-test-1',
           serviceUrl: '/'
         })
       })
