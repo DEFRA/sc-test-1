@@ -32,7 +32,7 @@ export const config = convict({
   port: {
     doc: 'The port to bind.',
     format: 'port',
-    default: 3000,
+    default: 3019,
     env: 'PORT'
   },
   staticCacheTimeout: {
@@ -56,6 +56,35 @@ export const config = convict({
     format: String,
     default: '/public',
     env: 'ASSET_PATH'
+  },
+  aws: {
+    region: {
+      doc: 'AWS region',
+      format: String,
+      default: 'eu-west-2',
+      env: 'AWS_REGION'
+    },
+    s3: {
+      endpoint: {
+        doc: 'AWS S3 endpoint',
+        format: String,
+        default: 'http://localhost:4566',
+        env: 'S3_ENDPOINT'
+      },
+      forcePathStyle: {
+        doc: 'AWS S3 forcePathStyle option',
+        format: Boolean,
+        default: !isProduction
+      }
+    },
+    dynamoDb: {
+      endpoint: {
+        doc: 'AWS DynamoDB endpoint',
+        format: String,
+        default: 'http://localhost:4566',
+        env: 'DYNAMODB_ENDPOINT'
+      }
+    }
   },
   isProduction: {
     doc: 'If this application running in the production environment',
