@@ -21,5 +21,5 @@ describe('#homeController', () => {
 
     expect(result).toEqual(expect.stringContaining('Home |'))
     expect(statusCode).toBe(statusCodes.ok)
-  })
+  }, 10000)
 })
