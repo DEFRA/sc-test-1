@@ -8,8 +8,7 @@ async function awaitResult(awaitable, times, name, logger) {
   logger.info(`${name} started...`)
   // eslint-disable-next-line no-unused-vars
   for (const i of [...Array(times).keys()]) {
-    const x = await awaitable()
-    console.log(x)
+    await awaitable()
   }
   logger.info(`${name} - ended ${Date.now() - start}`)
 }
