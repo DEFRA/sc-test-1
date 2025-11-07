@@ -1,8 +1,4 @@
-import {
-  DynamoDBClient,
-  GetItemCommand,
-  PutItemCommand
-} from '@aws-sdk/client-dynamodb'
+import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb'
 import { config } from '../../config/config.js'
 import { Agent } from 'https'
 import { NodeHttpHandler } from '@smithy/node-http-handler'
@@ -12,7 +8,8 @@ async function awaitResult(awaitable, times, name, logger) {
   logger.info(`${name} started...`)
   // eslint-disable-next-line no-unused-vars
   for (const i of [...Array(times).keys()]) {
-    await awaitable()
+    const x = await awaitable()
+    console.log(x)
   }
   logger.info(`${name} - ended ${Date.now() - start}`)
 }
@@ -23,7 +20,6 @@ async function awaitResult(awaitable, times, name, logger) {
  */
 export const homeController = {
   handler: async (request, h) => {
-    const uuid = crypto.randomUUID()
     const { logger } = request
     const sessionTable = 'sc-test-1-session'
 
@@ -49,35 +45,19 @@ export const homeController = {
       })
     })
 
-    const now = Date.now()
-    const value = {
-      a: 'something'
-    }
-    const expiresAt = Math.floor((now + 360_000) / 1000)
+    const getItemCommand = () =>
+      new GetItemCommand({
+        TableName: sessionTable,
+        Key: { id: { S: crypto.randomUUID() } },
+        ConsistentRead: false
+      })
 
-    const putItemCommand = new PutItemCommand({
-      TableName: sessionTable,
-      Item: {
-        id: { S: uuid },
-        value: { S: JSON.stringify(value) },
-        timestamp: { N: now.toString() },
-        expiresAt: { N: expiresAt.toString() }
-      }
-    })
-
-    const getItemCommand = new GetItemCommand({
-      TableName: sessionTable,
-      Key: { id: { S: uuid } },
-      ConsistentRead: false
-    })
-
-    const getItemConsistentReadCommand = new GetItemCommand({
-      TableName: sessionTable,
-      Key: { id: { S: uuid } },
-      ConsistentRead: true
-    })
-
-    await client.send(putItemCommand)
+    const getItemConsistentReadCommand = () =>
+      new GetItemCommand({
+        TableName: sessionTable,
+        Key: { id: { S: crypto.randomUUID() } },
+        ConsistentRead: true
+      })
 
     delete process.env.GLOBAL_AGENT_NO_PROXY
     logger.info(`NO_PROXY is ${process.env.GLOBAL_AGENT_NO_PROXY}`)
@@ -85,28 +65,28 @@ export const homeController = {
     logger.info(`performing ${times} times`)
 
     await awaitResult(
-      () => client.send(getItemCommand),
+      () => client.send(getItemCommand()),
       times,
       'direct get item',
       logger
     )
 
     await awaitResult(
-      () => client.send(getItemConsistentReadCommand),
+      () => client.send(getItemConsistentReadCommand()),
       times,
       'direct get item with consistent reads',
       logger
     )
 
     await awaitResult(
-      () => keepAliveClient.send(getItemCommand),
+      () => keepAliveClient.send(getItemCommand()),
       times,
       'direct (keep-alive) get item',
       logger
     )
 
     await awaitResult(
-      () => keepAliveClient.send(getItemConsistentReadCommand),
+      () => keepAliveClient.send(getItemConsistentReadCommand()),
       times,
       'direct (keep-alive) get item with consistent reads',
       logger
@@ -117,28 +97,28 @@ export const homeController = {
     logger.info(`NO_PROXY is ${process.env.GLOBAL_AGENT_NO_PROXY}`)
 
     await awaitResult(
-      () => client.send(getItemCommand),
+      () => client.send(getItemCommand()),
       times,
       'proxy get item',
       logger
     )
 
     await awaitResult(
-      () => client.send(getItemConsistentReadCommand),
+      () => client.send(getItemConsistentReadCommand()),
       times,
       'proxy get item with consistent reads',
       logger
     )
 
     await awaitResult(
-      () => keepAliveClient.send(getItemCommand),
+      () => keepAliveClient.send(getItemCommand()),
       times,
       'proxy (keep-alive) get item',
       logger
     )
 
     await awaitResult(
-      () => keepAliveClient.send(getItemConsistentReadCommand),
+      () => keepAliveClient.send(getItemConsistentReadCommand()),
       times,
       'proxy (keep-alive) get item with consistent reads',
       logger
