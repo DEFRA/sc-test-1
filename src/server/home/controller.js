@@ -58,9 +58,9 @@ export const homeController = {
         ConsistentRead: true
       })
 
-    process.env.GLOBAL_AGENT_NO_PROXY =
+    global.GLOBAL_AGENT.NO_PROXY =
       '.cdp-int.defra.cloud,.s3.eu-west-2.amazonaws.com,sqs.eu-west-2.amazonaws.com,sns.eu-west-2.amazonaws.com,dynamodb.eu-west-2.amazonaws.com'
-    logger.info(`NO_PROXY is ${process.env.GLOBAL_AGENT_NO_PROXY}`)
+    logger.info(`NO_PROXY is ${global.GLOBAL_AGENT.NO_PROXY}`)
 
     logger.info(`performing ${times} times`)
 
@@ -92,8 +92,8 @@ export const homeController = {
       logger
     )
 
-    delete process.env.GLOBAL_AGENT_NO_PROXY
-    logger.info(`NO_PROXY is ${process.env.GLOBAL_AGENT_NO_PROXY}`)
+    global.GLOBAL_AGENT.NO_PROXY = ''
+    logger.info(`NO_PROXY is ${global.GLOBAL_AGENT.NO_PROXY}`)
 
     await awaitResult(
       () => client.send(getItemCommand()),
